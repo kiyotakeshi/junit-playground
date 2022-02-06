@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.kiyotakeshi</groupId>
+    <artifactId>junit-playground</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.22</version>
+        </dependency>
+        <!-- junit.jupiter に関するドキュメント -->
+        <!-- @see https://oohira.github.io/junit5-doc-jp/user-guide/#dependency-metadata-junit-jupiter -->
+        <!-- JUnit Jupiter * Maven の公式サンプル -->
+        <!-- @see https://github.com/junit-team/junit5-samples/tree/main/junit5-jupiter-starter-maven/src -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <!-- テストや拡張機能を書くための API -->
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.8.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <!-- テストエンジン実装、実行時に必要になる(IDE にバンドルされている場合は不要) -->
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.8.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- junit5 からは Matcher API は組み込みではなくなったため third party のものを使用する場合は依存に追加する -->
+        <!-- AssertJ を使う場合 -->
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <!-- https://assertj.github.io/doc/ -->
+            <artifactId>assertj-core</artifactId>
+            <version>3.22.0</version>
+        </dependency>
+        <!-- Hamcrest を使う場合 -->
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+            <version>2.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>
