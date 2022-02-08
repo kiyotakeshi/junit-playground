@@ -25,12 +25,9 @@ class ProfileTest {
     @DisplayName("必須条件にマッチしない場合、 matches は false を返す")
     void matchAnswersFalseWhenMustMatchCriteriaNotMet() {
         // set up(arrange)
-        Answer profileAnswer = new Answer(Bool.FALSE, question);
-        profile.add(profileAnswer);
-
-        Answer criteriaAnswer = new Answer(Bool.TRUE, question);
-        Criterion criterion = new Criterion(criteriaAnswer, Weight.MustMatch);
-        criteria.add(criterion);
+        profile.add(new Answer(Bool.FALSE, question));
+        criteria.add(
+                new Criterion(new Answer(Bool.TRUE, question), Weight.MustMatch));
 
         // exercise(act)
         boolean matches = profile.matches(criteria);
@@ -43,12 +40,9 @@ class ProfileTest {
     @DisplayName("不問の条件がある場合、 matches は true を返す")
     void matchAnswersTrueForAnyDontCareCriteria() {
         // set up(arrange)
-        Answer profileAnswer = new Answer(Bool.FALSE, question);
-        profile.add(profileAnswer);
-
-        Answer criteriaAnswer = new Answer(Bool.TRUE, question);
-        Criterion criterion = new Criterion(criteriaAnswer, Weight.DontCare);
-        criteria.add(criterion);
+        profile.add(new Answer(Bool.FALSE, question));
+        criteria.add(
+                new Criterion(new Answer(Bool.TRUE, question), Weight.DontCare));
 
         // exercise(act)
         boolean matches = profile.matches(criteria);
