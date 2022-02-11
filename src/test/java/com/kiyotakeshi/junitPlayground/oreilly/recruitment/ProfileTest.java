@@ -5,9 +5,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 class ProfileTest {
 
     private Profile profile;
+    private Profile profile2;
+    private ProfilePool profilePool;
 
     private Question questionBonus;
     private Answer answerYesBonus;
@@ -25,7 +31,9 @@ class ProfileTest {
 
     @BeforeEach
     void createProfile() {
+        profilePool = new ProfilePool();
         profile = new Profile("Mike popcorn, Inc");
+        profile2 = new Profile("Kendrick West, Inc");
     }
 
     @BeforeEach
@@ -103,5 +111,28 @@ class ProfileTest {
         boolean matches = profile.matches(criteria);
 
         Assertions.assertFalse(matches);
+    }
+
+    private Criteria generateCriteria(Question question, int value, Weight weight) {
+        Criteria criteria = new Criteria();
+        criteria.add(new Criterion(new Answer(value, question), weight));
+        return criteria;
+    }
+
+    @Test
+    void answersResultsInScoredOrder() {
+        // set up(arrange)
+        profile.add(answerNoRelocation);
+        profilePool.add(profile);
+        profile2.add(answerYesRelocation);
+        profilePool.add(profile2);
+
+        profilePool.score(generateCriteria(questionRelocation, Bool.TRUE, Weight.Important));
+
+        // exercise(act)
+        List<Profile> ranked = profilePool.ranked();
+
+        // verify(assert)
+        assertThat(ranked.toArray()).isEqualTo(new Profile[]{profile2, profile});
     }
 }
