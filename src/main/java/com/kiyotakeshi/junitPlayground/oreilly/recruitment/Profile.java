@@ -22,32 +22,57 @@ public class Profile {
     }
 
     public boolean matches(Criteria criteria) {
-        score = 0;
-        boolean kill = false;
-        boolean anyMatches = false;
+        // すべてを別メソッドに切り出すとそれぞれでループが実行されるためパフォーマンスが悪いが、
+        // リファクタリングされたコードの「パフォーマンスが要件を満たせないという根拠がなければリファクタリングするべき」
+        // パフォーマンスが問題になってから最適化に時間を費やすべき
+        calculateScore(criteria);
+        if (doesNotMeetAnyMustMatchCriterion(criteria)) {
+            return false;
+        }
+        return anyMatches(criteria);
+    }
 
-        // criterion(条件)がプロフィールに含まれている回答とマッチするか判定
+    /**
+     * 必須の条件にマッチしない場合には false を返す
+     */
+    private boolean doesNotMeetAnyMustMatchCriterion(Criteria criteria) {
         for (Criterion criterion : criteria) {
-            Answer answer = answers.get(criterion.getAnswer().getQuestionText());
-            boolean match = criterion.getWeight() == Weight.DontCare || answer.match(criterion.getAnswer());
-
-            // 必須条件を満たしていなければ false
+            boolean match = criterion.matches(answerMatching(criterion));
             if (!match && criterion.getWeight() == Weight.MustMatch) {
-                kill = true;
+                return true;
             }
-            // 条件を満たす回答がプロフィールにあるとその条件で指定されるスコアがプロフィールに加算される
-            if (match) {
+        }
+        return false;
+    }
+
+    /**
+     * 指定されたスコアを返す
+     */
+    private void calculateScore(Criteria criteria) {
+        score = 0;
+        for (Criterion criterion : criteria) {
+            if (criterion.matches(answerMatching(criterion))) {
                 score += criterion.getWeight().getValue();
             }
-            anyMatches |= match;
         }
-        if (kill) {
-            return false;
+    }
+
+    /**
+     * 1つでもマッチが発生したか判定
+     */
+    private boolean anyMatches(Criteria criteria) {
+        boolean anyMatches = false;
+        for (Criterion criterion : criteria) {
+            anyMatches |= criterion.matches(answerMatching(criterion));
         }
         return anyMatches;
     }
 
-    public int score(){
+    private Answer answerMatching(Criterion criterion) {
+        return answers.get(criterion.getAnswer().getQuestionText());
+    }
+
+    public int score() {
         return score;
     }
 }

@@ -90,7 +90,7 @@ class ProfileTest {
     public void matchAnswersTrueWhenAnyOfMultipleCriteriaMatch() {
         // set up(arrange)
         profile.add(answerYesRelocation);
-        profile.add(answerYesLongVacation);
+        profile.add(answerNoLongVacation);
         criteria.add(new Criterion(answerYesRelocation, Weight.Important));
         criteria.add(new Criterion(answerYesLongVacation, Weight.Important));
 
